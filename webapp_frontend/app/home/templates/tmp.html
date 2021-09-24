@@ -1,0 +1,18 @@
+{% extends "layouts/base.html" %}  
+{% block title %} Camera {% endblock title %}
+
+{% block head %}
+{{ super() }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.dom.js"></script>
+<script src="/static/sketch.js"></script>
+{% endblock head %}
+
+{% block content %}
+<div class="container">
+	<button id="delete">Delete</button>
+	<video id="video" width="1024" height="576" loop="loop" autoplay muted></video>
+  </p>
+</div>
+
+{% endblock content %}

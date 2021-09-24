@@ -1,3 +1,6 @@
 **/.DS_Store
 **/.devcontainer
 **/__pycache__
+data_
+webapp_frontend/app/base/static/data
+*.mp4

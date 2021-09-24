@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  webapp_backend:
+    build:
+      context: ./webapp_backend
+      dockerfile: 'backend.Dockerfile'
+    ports:
+      - '5000:5000'
+    volumes:
+      - './data_:/app/data'
+    command: python app.py
+
+  classification:
+    build:
+      context: ./classification
+      dockerfile: 'cuda.Dockerfile'
+    ports:
+      - '5001:5001'
+    volumes:
+      - './data_:/app/data'
+    command: python server.py
+
+  webapp_frontend:
+    build:
+      context: ./webapp_frontend
+      dockerfile: 'Dockerfile'
+    ports:
+      - '7006:7006'
+
+volumes:
+  data:
+    driver: local 

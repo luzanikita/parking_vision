@@ -1,0 +1,99 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Tables {% endblock %} 
+
+{% block head %}
+{{ super() }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.dom.js"></script>
+<script src="/static/sketch.js"></script>
+{% endblock head %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<div class="row">
+  <button class="btn btn-primary pull-right" id="delete">Delete</button>
+</div>
+<div class="row">
+  <div style="margin-left: 23%">
+    <video id="video" width="1024" height="576" loop="loop" autoplay muted></video>
+  </div>
+</div>  
+
+        <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+              <div class="card card-plain">
+                <div class="card-header card-header-primary">
+                  <h4 class="card-title mt-0"> Camera List</h4>
+                  <p class="card-category"> Choose camera and monitor parking lots</p>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-hover">
+                      <thead class="">
+                        <th>
+                          ID
+                        </th>
+                        <th>
+                          Name
+                        </th>
+                        <th>
+                          Is available
+                        </th>
+                      </thead>
+                      <tbody>
+                        <tr onclick="cameraId=3; setup(); initAoiList();">
+                          <td>
+                            3
+                          </td>
+                          <td>
+                            CAM1
+                          </td>
+                          <td>
+                            true
+                          </td>
+                        </tr>
+                        <tr onclick="cameraId=2; setup(); initAoiList();">
+                          <td>
+                            2
+                          </td>
+                          <td>
+                            CAM2
+                          </td>
+                          <td>
+                            true
+                          </td>
+                        </tr>
+                        <tr onclick="cameraId=4; setup(); initAoiList();">
+                          <td>
+                            4
+                          </td>
+                          <td>
+                            CAM3
+                          </td>
+                          <td>
+                            true
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

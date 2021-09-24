@@ -5,26 +5,33 @@ let video;
 let statusData;
 let predictionData;
 let img_path;
+let cueId;
+let canvas;
 
 let frame_i = 0;
 let fr = 30;
-let cameraId = 3;
+let cameraId = 2;
 let minTestCounts = 3;
 
-function setup() {
+async function setup() {
+	aoiCollection = {};
 	pixelDensity(1);
 	video = select("#video");
-	videoStream = createVideo([`../data_/camera_${cameraId}.mp4`]);
+	if (canvas != undefined) {
+		videoStream.removeCue(cueId);
+		canvas.remove();
+	}
+	videoStream = createVideo([`/static/camera_${cameraId}.mp4`]);
 	videoStream.hide();
 	videoStream.loop();
-	videoStream.addCue(0.01, refreshFrameCount);
+	cueId = videoStream.addCue(0.01, refreshFrameCount);
 	canvas = createCanvas(0, 0);
 	fitCanvasToVideo();
 	frameRate(30);
 	let deleteButton = select("#delete");
 	deleteButton.mousePressed(deleteAoi);
 
-	initAoiList();
+	await initAoiList();
 }
 
 function refreshFrameCount() {
@@ -324,6 +331,7 @@ async function getStatus(cameraId) {
 
 async function getPredictions(data, img_path) {
 	data.img_path = img_path;
+	console.log(cameraId, frame_i, img_path);
 	const url = 'http://127.0.0.1:5001/predict';
 	await fetch(url, {  
 		method: 'post',  
@@ -340,6 +348,7 @@ async function getPredictions(data, img_path) {
 			}
 			response.json().then(function(data) {
 				predictionData = data;
+				console.log(data);
 			});
 		}  
 	  )  
@@ -347,6 +356,7 @@ async function getPredictions(data, img_path) {
 		console.log(aoiCollection);
 		console.log(data);
 		console.log('Fetch Error :-S', err);  
+		console.log(img_path);
 	  });
 }
 
@@ -377,8 +387,8 @@ async function updateStatus(status) {
 
 
 async function initAoiList() {
-	aoiCollection = {}
 	await getStatus(cameraId);
+	aoiCollection = {}
 	if (statusData != undefined) {
 		statusData.lots.forEach(
 			lot => {
@@ -390,12 +400,14 @@ async function initAoiList() {
 
 async function updateCall(img_path) {
 	await getStatus(cameraId=cameraId);
-	if (aoiCollection != {} && statusData != undefined && statusData.lots.length > 0) {;
+	if (statusData != undefined && statusData.lots.length > 0) {;
 		await getPredictions(statusData, img_path);
 		if (predictionData != undefined) {
 			for (let i = 0; i < predictionData.statuses.length; i++) {
 				let statusNew = predictionData.statuses[i];
 				let statusOld = aoiCollection[statusNew.lot_id]
+				if (statusOld == undefined)
+					return;
 				aoiCollection[statusNew.lot_id].predictions.push(statusNew.is_free);
 				if (
 					aoiCollection[statusNew.lot_id].predictions.length > 1 && 
